@@ -1,8 +1,9 @@
 import React from 'react'
+import LandingPage from '@/components/Home/Hero'
 
 function page() {
   return (
-    <div>hiii</div>
+    <LandingPage/>
   )
 }
 
