@@ -1,60 +1,72 @@
-"use client"
-import React, { useState } from "react"
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+"use client";
+import React, { useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const members = [
-    { id: 1, name: "Alice", avatar: "alice.jpg" },
-    { id: 2, name: "Bob", avatar: "bob.jpg" }
-]
+  { id: 1, name: "Alice", avatar: "alice.jpg" },
+  { id: 2, name: "Bob", avatar: "bob.jpg" },
+];
 
-const tags = ["Services", "Customer Care", "Development", "Design"]
+const tags = ["Services", "Customer Care", "Development", "Design"];
 
 interface CreateTaskFormProps {
   onSubmit?: (taskData: {
-    title: string
-    description: string
-    deadline: string
-    manager: string
-    tags: string[]
-    image: File | null
-    numTasks: number
-    createdAt: string
-    priority: string
-  }) => void
+    title: string;
+    description: string;
+    deadline: string;
+    manager: string;
+    tags: string[];
+    image: File | null;
+    numTasks: number;
+    createdAt: string;
+    priority: string;
+  }) => void;
 }
 
 export default function CreateTaskForm({ onSubmit }: CreateTaskFormProps) {
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [deadline, setDeadline] = useState("")
-  const [manager, setManager] = useState("")
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
-  const [image, setImage] = useState<File | null>(null)
-  const [priority, setPriority] = useState("")
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [manager, setManager] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [image, setImage] = useState<File | null>(null);
+  const [priority, setPriority] = useState("");
 
   const handleTagChange = (tag: string) => {
     setSelectedTags(
       selectedTags.includes(tag)
-        ? selectedTags.filter(t => t !== tag)
+        ? selectedTags.filter((t) => t !== tag)
         : [...selectedTags, tag]
-    )
-  }
+    );
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0])
+      setImage(e.target.files[0]);
     } else {
-      setImage(null)
+      setImage(null);
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     const taskData = {
       title,
       description,
@@ -64,16 +76,18 @@ export default function CreateTaskForm({ onSubmit }: CreateTaskFormProps) {
       image,
       numTasks: 0,
       createdAt: new Date().toISOString().slice(0, 10),
-      priority
-    }
-    if (onSubmit) onSubmit(taskData)
-  }
+      priority,
+    };
+    if (onSubmit) onSubmit(taskData);
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Card className="w-full max-w-md shadow-lg border border-gray-200">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Create New Task</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">
+            Create New Task
+          </CardTitle>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
@@ -82,7 +96,7 @@ export default function CreateTaskForm({ onSubmit }: CreateTaskFormProps) {
               <Input
                 id="title"
                 value={title}
-                onChange={e => setTitle(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)}
                 required
                 placeholder="Task title"
               />
@@ -92,7 +106,7 @@ export default function CreateTaskForm({ onSubmit }: CreateTaskFormProps) {
               <Textarea
                 id="description"
                 value={description}
-                onChange={e => setDescription(e.target.value)}
+                onChange={(e) => setDescription(e.target.value)}
                 required
                 placeholder="Task description"
                 className="min-h-[80px]"
@@ -104,7 +118,7 @@ export default function CreateTaskForm({ onSubmit }: CreateTaskFormProps) {
                 id="deadline"
                 type="date"
                 value={deadline}
-                onChange={e => setDeadline(e.target.value)}
+                onChange={(e) => setDeadline(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -114,7 +128,7 @@ export default function CreateTaskForm({ onSubmit }: CreateTaskFormProps) {
                   <SelectValue placeholder="Select Manager" />
                 </SelectTrigger>
                 <SelectContent>
-                  {members.map(m => (
+                  {members.map((m) => (
                     <SelectItem key={m.id} value={m.name}>
                       {m.name}
                     </SelectItem>
@@ -138,14 +152,16 @@ export default function CreateTaskForm({ onSubmit }: CreateTaskFormProps) {
             <div className="space-y-2">
               <Label>Tags</Label>
               <div className="flex gap-2 flex-wrap">
-                {tags.map(tag => (
+                {tags.map((tag) => (
                   <Button
                     key={tag}
                     type="button"
                     variant={selectedTags.includes(tag) ? "default" : "outline"}
                     onClick={() => handleTagChange(tag)}
                     size="sm"
-                    className={selectedTags.includes(tag) ? "bg-primary text-white" : ""}
+                    className={
+                      selectedTags.includes(tag) ? "bg-primary text-white" : ""
+                    }
                   >
                     {tag}
                   </Button>
@@ -170,5 +186,5 @@ export default function CreateTaskForm({ onSubmit }: CreateTaskFormProps) {
         </form>
       </Card>
     </div>
-  )
+  );
 }

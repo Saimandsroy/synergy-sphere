@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useState } from "react"
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
-import { getFirestore, doc, setDoc } from "firebase/firestore"
-import { Button } from "@/components/ui/button"
+import React, { useState } from "react";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,78 +15,76 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import { app } from "@/firebase";
+import { useRouter } from "next/navigation";
 
-import { app } from "@/app/firebase" 
-
-const auth = getAuth(app)
-const db = getFirestore(app)
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 export default function TabsDemo() {
- 
-  const [regName, setRegName] = useState("")
-  const [regEmail, setRegEmail] = useState("")
-  const [regPassword, setRegPassword] = useState("")
-  const [regLoading, setRegLoading] = useState(false)
-  const [regError, setRegError] = useState("")
+  const router = useRouter();
 
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regLoading, setRegLoading] = useState(false);
+  const [regError, setRegError] = useState("");
 
-  const [loginEmail, setLoginEmail] = useState("")
-  const [loginPassword, setLoginPassword] = useState("")
-  const [loginLoading, setLoginLoading] = useState(false)
-  const [loginError, setLoginError] = useState("")
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
-  
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setRegLoading(true)
-    setRegError("")
+    e.preventDefault();
+    setRegLoading(true);
+    setRegError("");
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, regEmail, regPassword)
-      const user = userCredential.user
-      
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        regEmail,
+        regPassword
+      );
+      const user = userCredential.user;
+
       await setDoc(doc(db, "users", user.uid), {
         name: regName,
         email: regEmail,
-        createdAt: new Date()
-      })
-      setRegName("")
-      setRegEmail("")
-      setRegPassword("")
-      alert("Registration successful!")
+        createdAt: new Date(),
+      });
+      setRegName("");
+      setRegEmail("");
+      setRegPassword("");
+      alert("Registration successful!");
+      router.push("/");
     } catch (error: any) {
-      setRegError(error.message)
+      setRegError(error.message);
     }
-    setRegLoading(false)
-  }
+    setRegLoading(false);
+  };
 
- 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoginLoading(true)
-    setLoginError("")
+    e.preventDefault();
+    setLoginLoading(true);
+    setLoginError("");
     try {
-      await signInWithEmailAndPassword(auth, loginEmail, loginPassword)
-      setLoginEmail("")
-      setLoginPassword("")
-      alert("Login successful!")
+      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      setLoginEmail("");
+      setLoginPassword("");
+      alert("Login successful!");
     } catch (error: any) {
-      setLoginError(error.message)
+      setLoginError(error.message);
     }
-    setLoginLoading(false)
-  }
+    setLoginLoading(false);
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-black">
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Tabs defaultValue="account">
           <TabsList>
@@ -105,7 +107,7 @@ export default function TabsDemo() {
                       id="register-name"
                       placeholder="Enter your name"
                       value={regName}
-                      onChange={e => setRegName(e.target.value)}
+                      onChange={(e) => setRegName(e.target.value)}
                       required
                     />
                   </div>
@@ -116,7 +118,7 @@ export default function TabsDemo() {
                       type="email"
                       placeholder="Enter your email"
                       value={regEmail}
-                      onChange={e => setRegEmail(e.target.value)}
+                      onChange={(e) => setRegEmail(e.target.value)}
                       required
                     />
                   </div>
@@ -127,11 +129,13 @@ export default function TabsDemo() {
                       type="password"
                       placeholder="Create a password"
                       value={regPassword}
-                      onChange={e => setRegPassword(e.target.value)}
+                      onChange={(e) => setRegPassword(e.target.value)}
                       required
                     />
                   </div>
-                  {regError && <div className="text-red-500 text-sm">{regError}</div>}
+                  {regError && (
+                    <div className="text-red-500 text-sm">{regError}</div>
+                  )}
                 </CardContent>
                 <CardFooter>
                   <Button type="submit" disabled={regLoading}>
@@ -158,7 +162,7 @@ export default function TabsDemo() {
                       type="email"
                       placeholder="Enter your email"
                       value={loginEmail}
-                      onChange={e => setLoginEmail(e.target.value)}
+                      onChange={(e) => setLoginEmail(e.target.value)}
                       required
                     />
                   </div>
@@ -169,11 +173,13 @@ export default function TabsDemo() {
                       type="password"
                       placeholder="Enter your password"
                       value={loginPassword}
-                      onChange={e => setLoginPassword(e.target.value)}
+                      onChange={(e) => setLoginPassword(e.target.value)}
                       required
                     />
                   </div>
-                  {loginError && <div className="text-red-500 text-sm">{loginError}</div>}
+                  {loginError && (
+                    <div className="text-red-500 text-sm">{loginError}</div>
+                  )}
                 </CardContent>
                 <CardFooter>
                   <Button type="submit" disabled={loginLoading}>
@@ -186,5 +192,5 @@ export default function TabsDemo() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
